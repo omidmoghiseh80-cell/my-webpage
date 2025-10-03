@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omid Page</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 200vh;
+    width: 100%;
+    font-family: sans-serif;
+    background: #000;
+    overflow-x: hidden;
+    scroll-behavior: auto;
+  }
+
+  /* اسکرول بار سفارشی */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1; /* بالای canvas */
+    color: #fff;
+  }
+
+  .line {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.5;
+    display: block;
+  }
+
+  .char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: drop 0.6s forwards;
+  }
+
+  @keyframes drop {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cards-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 2;
+    background: #000;
+    margin-top: 100vh;
+  }
+
+  .card {
+    width: 250px;
+    height: 350px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-10px) scale(1.05) rotate(2deg);
+    box-shadow: 0 30px 60px rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .card:nth-child(1) {
+    animation: slideInFromLeft 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .card:nth-child(2) {
+    animation: slideInFromBottom 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .card:nth-child(3) {
+    animation: slideInFromRight 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+
+  /* انیمیشن‌های جدید برای تصاویر */
+  .animated-bg {
+    background:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 60%),
+      linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
+    background-size: 100px 100px, 100px 100px, 200px 200px, 200px 200px, 100% 100%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  .animated-bg-2 {
+    background:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(10, 10, 10, 0.9) 100%);
+    background-size: 120px 120px, 120px 120px, 250px 250px, 250px 250px, 100% 100%;
+    animation: gradientShift 18s ease infinite;
+  }
+
+  .animated-bg-3 {
+    background:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
+      radial-gradient(circle at 25% 75%, rgba(255, 255, 255, 0.07) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(25, 25, 25, 0.88) 0%, rgba(5, 5, 5, 0.92) 100%);
+    background-size: 80px 80px, 80px 80px, 300px 300px, 200px 200px, 100% 100%;
+    animation: gradientShift 20s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+    25% { background-position: 100% 100%, 100% 100%, 50% 50%, 50% 50%, 25% 25%; }
+    50% { background-position: 100% 0%, 0% 100%, 100% 100%, 100% 0%, 50% 50%; }
+    75% { background-position: 0% 100%, 100% 0%, 50% 0%, 0% 100%, 75% 75%; }
+    100% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 100% 100%; }
+  }
+
+  .floating-shapes::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .floating-shapes-2::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite reverse;
+  }
+
+  .floating-shapes::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: rotate 6s linear infinite;
+  }
+
+  .floating-shapes-2::before {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: pulseShape 4s ease-in-out infinite;
+  }
+
+  .animated-bg::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 25px solid rgba(255, 255, 255, 0.2);
+    animation: triangleFloat 5s ease-in-out infinite;
+  }
+
+  .animated-bg-2::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    animation: lineMove 4s linear infinite;
+  }
+
+  .animated-bg-3::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: diamondRotate 6s linear infinite;
+  }
+
+  /* افکت‌های اضافی برای جذابیت بیشتر */
+  .animated-bg::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: bubbleFloat 7s ease-in-out infinite;
+  }
+
+  .animated-bg-2::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    animation: waveRotate 8s linear infinite;
+  }
+
+  .animated-bg-3::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: conic-gradient(from 0deg, rgba(255, 255, 255, 0.2), transparent, rgba(255, 255, 255, 0.2));
+    border-radius: 50%;
+    animation: spinCycle 9s linear infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  @keyframes rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  @keyframes pulseShape {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.5); opacity: 0.3; }
+  }
+
+  @keyframes triangleFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-15px) rotate(90deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+    75% { transform: translateY(-15px) rotate(270deg); }
+  }
+
+  @keyframes lineMove {
+    0% { transform: translateX(-100%) rotate(0deg); }
+    50% { transform: translateX(100%) rotate(180deg); }
+    100% { transform: translateX(-100%) rotate(360deg); }
+  }
+
+  @keyframes diamondRotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  @keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.1; }
+    50% { transform: translateY(-40px) scale(1.5); opacity: 0.3; }
+  }
+
+  @keyframes waveRotate {
+    0% { transform: rotate(0deg) scale(1); opacity: 0.15; }
+    50% { transform: rotate(180deg) scale(1.2); opacity: 0.3; }
+    100% { transform: rotate(360deg) scale(1); opacity: 0.15; }
+  }
+
+  @keyframes spinCycle {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .card-image-icon {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.8);
+    z-index: 2;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  .card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #fff, #ccc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+
+  .light-effect {
+    position: fixed;
+    top: 140vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: lightPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes lightPulse {
+    0% {
+      opacity: 0.6;
+      transform: translateX(-50%) scale(1);
+    }
+    100% {
+      opacity: 0.9;
+      transform: translateX(-50%) scale(1.1);
+    }
+  }
+
+  .air-flow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .air-particle {
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1px;
+    animation: airFlow 3s linear infinite;
+  }
+
+  @keyframes airFlow {
+    0% {
+      transform: translateY(100px) rotate(0deg);
+      opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% {
+      transform: translateY(-100px) rotate(5deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fallDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-200px) rotateX(90deg) rotateZ(2deg);
+    }
+    10% {
+      opacity: 0.8;
+      transform: translateY(-150px) rotateX(80deg) rotateZ(-1deg);
+    }
+    30% {
+      opacity: 0.9;
+      transform: translateY(-50px) rotateX(20deg) rotateZ(1deg);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(10px) rotateX(-5deg) rotateZ(-0.5deg);
+    }
+    70% {
+      transform: translateY(-5px) rotateX(2deg) rotateZ(0.2deg);
+    }
+    85% {
+      transform: translateY(2px) rotateX(-1deg) rotateZ(-0.1deg);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg) rotateZ(0deg);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-400px) scale(0.8);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateX(-20px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(200px) scale(0.8);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateY(-20px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes slideInFromRight {
+    0% {
+      opacity: 0;
+      transform: translateX(400px) scale(0.8);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateX(20px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="splash"></canvas>
+
+<div class="text-container">
+  <div class="line" id="line1"></div>
+  <div class="line" id="line2"></div>
+</div>
+
+<div class="light-effect"></div>
+
+  <div class="cards-container">
+  <div class="card">
+    <div class="card-image animated-bg floating-shapes">
+      <div class="card-image-icon">👨‍💻</div>
+    </div>
+    <h3>About Me / درباره من</h3>
+    <p>Web Developer<br>Creative<br>Seeker of New Ideas</p>
+  </div>
+
+  <div class="card">
+    <div class="card-image animated-bg-2 floating-shapes-2">
+      <div class="card-image-icon">🚀</div>
+    </div>
+    <h3>Portfolio / نمونه پروژه</h3>
+    <p>Modern Web Apps<br>React • TypeScript<br>Responsive Design</p>
+  </div>
+
+  <div class="card">
+    <div class="card-image animated-bg-3">
+      <div class="card-image-icon">📧</div>
+    </div>
+    <h3>Contact / ارتباط با من</h3>
+    <p>Find me on:<br>Email • Telegram<br>Instagram • Phone</p>
+  </div>
+</div>
+
+<div class="air-flow" id="airFlowContainer"></div>
+
+<script>
+  const line1Text = "Hi, I'm Omid.";
+  const line2Text = "You can learn more about me here.";
+
+  const createAnimatedLine = (text, containerId, delayOffset = 0) => {
+    const container = document.getElementById(containerId);
+    text.split('').forEach((char, index) => {
+      const span = document.createElement('span');
+      span.innerHTML = char === ' ' ? '&nbsp;' : char;
+      span.className = 'char';
+      span.style.animationDelay = `${delayOffset + index * 0.05}s`;
+      container.appendChild(span);
+    });
+  };
+
+  createAnimatedLine(line1Text, 'line1', 0);
+  createAnimatedLine(line2Text, 'line2', line1Text.length * 0.05 + 0.3);
+
+  // ایجاد ذرات جریان هوا
+  function createAirParticles() {
+    const container = document.getElementById('airFlowContainer');
+    const cardCount = 3;
+
+    setInterval(() => {
+      for (let i = 0; i < cardCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'air-particle';
+
+        // موقعیت تصادفی در اطراف هر کارت
+        const card = document.querySelectorAll('.card')[i];
+        if (card) {
+          const cardRect = card.getBoundingClientRect();
+          const startX = Math.random() * cardRect.width + (cardRect.left - 150);
+          const startY = cardRect.bottom + 50;
+
+          particle.style.left = `${startX}px`;
+          particle.style.top = `${startY}px`;
+          particle.style.animationDelay = `${Math.random() * 2}s`;
+          particle.style.transformOrigin = 'center';
+
+          container.appendChild(particle);
+
+          // حذف ذره بعد از انیمیشن
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 3000);
+        }
+      }
+    }, 200);
+  }
+
+  // شروع ایجاد ذرات بعد از لود صفحه
+  window.addEventListener('load', () => {
+    // اسکرول به اول صفحه برای شبیه‌سازی باز شدن تازه صفحه
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 100);
+
+    setTimeout(createAirParticles, 2000);
+
+    // فعال کردن انیمیشن‌ها با اسکرول
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, observerOptions);
+
+    // مشاهده کادرها
+    document.querySelectorAll('.card').forEach(card => {
+      card.style.animationPlayState = 'paused';
+      observer.observe(card);
+    });
+
+    // ریست انیمیشن‌ها برای شبیه‌سازی باز شدن تازه صفحه
+    setTimeout(() => {
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.animation = 'none';
+        card.offsetHeight; // trigger reflow
+        card.style.animation = '';
+        card.style.animationPlayState = 'paused';
+      });
+    }, 100);
+
+    // کنترل اسکرول برای جلوگیری از اسکرول پایین وقتی کادرها وسط صفحه هستند
+    let isScrollLocked = false;
+    const cardsContainer = document.querySelector('.cards-container');
+
+    window.addEventListener('scroll', () => {
+      const containerTop = cardsContainer.offsetTop;
+      const containerHeight = cardsContainer.offsetHeight;
+      const scrollTop = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+
+      // اگر کادرها وسط صفحه هستند
+      if (scrollTop + windowHeight / 2 >= containerTop &&
+          scrollTop + windowHeight / 2 < containerTop + containerHeight) {
+        isScrollLocked = true;
+      } else {
+        isScrollLocked = false;
+      }
+
+      // اگر سعی در اسکرول پایین داریم و قفل فعال است، جلوگیری کن
+      if (isScrollLocked && window.pageYOffset > scrollTop) {
+        window.scrollTo(0, scrollTop);
+      }
+    });
+  });
+</script>
+
+<script type="module">
+  import SplashCursor from './SplashCursor.js';
+
+  // ایجاد SplashCursor
+  const splash = new SplashCursor({ TRANSPARENT: true });
+
+  // جایگزین کردن canvas اصلی با SplashCursor
+  const oldCanvas = document.getElementById('splash');
+  oldCanvas.replaceWith(splash.canvas);
+  splash.canvas.id = 'splash';
+</script>
+
+</body>
+</html>
