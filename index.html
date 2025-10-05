@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Omid Page</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 200vh;
+    width: 100%;
+    font-family: sans-serif;
+    background: #000;
+    overflow-x: hidden;
+    scroll-behavior: auto;
+  }
+
+  /* اسکرول بار سفارشی */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1; /* بالای canvas */
+    color: #fff;
+  }
+
+  .line {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.5;
+    display: block;
+  }
+
+  /* Media Queries for Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .text-container {
+      padding: 1rem;
+    }
+
+    .line {
+      font-size: 1.8rem;
+      line-height: 1.3;
+    }
+
+    .cards-container {
+      height: auto;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+      min-height: 300px;
+      padding: 1.2rem;
+      margin-bottom: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .card-image {
+      height: 150px;
+      margin-bottom: 0.8rem;
+      box-sizing: border-box;
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: #222;
+      background: none;
+      background-clip: initial;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: initial;
+    }
+
+    .card p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #444;
+      opacity: 1;
+    }
+
+    .light-effect {
+      width: 400px;
+      height: 300px;
+      top: 120vh;
+    }
+
+    /* Keep animations for mobile */
+    .card:nth-child(1) {
+      animation: slideInFromLeft 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .card:nth-child(2) {
+      animation: slideInFromBottom 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .card:nth-child(3) {
+      animation: slideInFromRight 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    /* Enhanced hover effects for mobile */
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Touch-friendly interactions */
+    .card:active {
+      transform: translateY(-5px) scale(1.02);
+      transition: transform 0.2s ease;
+    }
+
+    /* Mobile panel adjustments */
+    .info-panel {
+      padding: 1rem;
+      max-height: 70vh;
+    }
+
+    .info-panel h2 {
+      font-size: 1.8rem;
+    }
+
+    .info-panel .close-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 1.4rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .line {
+      font-size: 1.2rem;
+    }
+
+    .cards-container {
+      padding: 1.2rem 0.8rem;
+      gap: 0.9rem;
+    }
+
+    .card {
+      max-width: 280px;
+      min-height: 240px;
+      padding: 0.7rem;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .card-image {
+      height: 110px;
+      box-sizing: border-box;
+    }
+
+    .card-image-icon {
+      font-size: 2.3rem;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #222;
+      background: none;
+      background-clip: initial;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: initial;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #444;
+      opacity: 1;
+    }
+
+    .light-effect {
+      width: 300px;
+      height: 200px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .line {
+      font-size: 1rem;
+    }
+
+    .card {
+      max-width: 260px;
+      min-height: 210px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .card-image {
+      height: 95px;
+      box-sizing: border-box;
+    }
+
+    .card-image-icon {
+      font-size: 1.9rem;
+    }
+
+    .card h3 {
+      margin-bottom: 0.3rem;
+      color: #222;
+      background: none;
+      background-clip: initial;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: initial;
+    }
+
+    .card p {
+      margin: 0;
+      line-height: 1.3;
+      color: #444;
+      opacity: 1;
+    }
+  }
+
+  .char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: drop 0.6s forwards;
+  }
+
+  @keyframes drop {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cards-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 2;
+    background: #000;
+    margin-top: 100vh;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    width: 250px;
+    height: 350px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 14px;
+    backdrop-filter: blur(24px);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    padding: 1.5rem;
+    text-align: center;
+    color: #000;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: conic-gradient(from 0deg, transparent, rgba(255, 107, 107, 0.8), transparent, rgba(78, 205, 196, 0.8), transparent, rgba(69, 183, 209, 0.8), transparent);
+    border-radius: 16px;
+    z-index: -1;
+    animation: rotate 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card:nth-child(1)::before {
+    background: conic-gradient(from 0deg, transparent, #ff6b6b, transparent);
+  }
+
+  .card:nth-child(2)::before {
+    background: conic-gradient(from 0deg, transparent, #4ecdc4, transparent);
+  }
+
+  .card:nth-child(3)::before {
+    background: conic-gradient(from 0deg, transparent, #45b7d1, transparent);
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+
+  .card:nth-child(1) {
+    animation: slideInFromLeft 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .card:nth-child(2) {
+    animation: slideInFromBottom 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .card:nth-child(3) {
+    animation: slideInFromRight 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+
+  /* انیمیشن‌های جدید برای تصاویر */
+  .animated-bg {
+    background:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 60%),
+      linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
+    background-size: 100px 100px, 100px 100px, 200px 200px, 200px 200px, 100% 100%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  .animated-bg-2 {
+    background:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(30, 30, 30, 0.85) 0%, rgba(10, 10, 10, 0.9) 100%);
+    background-size: 120px 120px, 120px 120px, 250px 250px, 250px 250px, 100% 100%;
+    animation: gradientShift 18s ease infinite;
+  }
+
+  .animated-bg-3 {
+    background:
+      linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
+      radial-gradient(circle at 25% 75%, rgba(255, 255, 255, 0.07) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(25, 25, 25, 0.88) 0%, rgba(5, 5, 5, 0.92) 100%);
+    background-size: 80px 80px, 80px 80px, 300px 300px, 200px 200px, 100% 100%;
+    animation: gradientShift 20s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+    25% { background-position: 100% 100%, 100% 100%, 50% 50%, 50% 50%, 25% 25%; }
+    50% { background-position: 100% 0%, 0% 100%, 100% 100%, 100% 0%, 50% 50%; }
+    75% { background-position: 0% 100%, 100% 0%, 50% 0%, 0% 100%, 75% 75%; }
+    100% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 100% 100%; }
+  }
+
+  .floating-shapes::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .floating-shapes-2::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    animation: float 3s ease-in-out infinite reverse;
+  }
+
+  .floating-shapes::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: rotate 6s linear infinite;
+  }
+
+  .floating-shapes-2::before {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: pulseShape 4s ease-in-out infinite;
+  }
+
+  .animated-bg::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 25px solid rgba(255, 255, 255, 0.2);
+    animation: triangleFloat 5s ease-in-out infinite;
+  }
+
+  .animated-bg-2::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    animation: lineMove 4s linear infinite;
+  }
+
+  .animated-bg-3::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: diamondRotate 6s linear infinite;
+  }
+
+  /* افکت‌های اضافی برای جذابیت بیشتر */
+  .animated-bg::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: bubbleFloat 7s ease-in-out infinite;
+  }
+
+  .animated-bg-2::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    animation: waveRotate 8s linear infinite;
+  }
+
+  .animated-bg-3::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: conic-gradient(from 0deg, rgba(255, 255, 255, 0.2), transparent, rgba(255, 255, 255, 0.2));
+    border-radius: 50%;
+    animation: spinCycle 9s linear infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  @keyframes rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  @keyframes pulseShape {
+    0%, 100% { transform: scale(1); opacity: 0.1; }
+    50% { transform: scale(1.5); opacity: 0.3; }
+  }
+
+  @keyframes triangleFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-15px) rotate(90deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+    75% { transform: translateY(-15px) rotate(270deg); }
+  }
+
+  @keyframes lineMove {
+    0% { transform: translateX(-100%) rotate(0deg); }
+    50% { transform: translateX(100%) rotate(180deg); }
+    100% { transform: translateX(-100%) rotate(360deg); }
+  }
+
+  @keyframes diamondRotate {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  @keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.1; }
+    50% { transform: translateY(-40px) scale(1.5); opacity: 0.3; }
+  }
+
+  @keyframes waveRotate {
+    0% { transform: rotate(0deg) scale(1); opacity: 0.15; }
+    50% { transform: rotate(180deg) scale(1.2); opacity: 0.3; }
+    100% { transform: rotate(360deg) scale(1); opacity: 0.15; }
+  }
+
+  @keyframes spinCycle {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .card-image-icon {
+    font-size: 3rem;
+    color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  /* Blob animation and background effects */
+  .bg {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 240px;
+    height: 340px;
+    z-index: 2;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(24px);
+    border-radius: 20px;
+    overflow: hidden;
+    outline: 2px solid white;
+  }
+
+  .blob {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: var(--blob-color, #ff0000);
+    opacity: 1;
+    filter: blur(12px);
+    animation: blob-bounce 5s infinite ease;
+    transform: translate(-50%, -50%);
+  }
+
+  @keyframes blob-bounce {
+    0% {
+      transform: translate(-50%, -50%) translate3d(0, 0, 0);
+    }
+
+    25% {
+      transform: translate(-50%, -50%) translate3d(100%, 0, 0);
+    }
+
+    50% {
+      transform: translate(-50%, -50%) translate3d(100%, 100%, 0);
+    }
+
+    75% {
+      transform: translate(-50%, -50%) translate3d(0, 100%, 0);
+    }
+
+    100% {
+      transform: translate(-50%, -50%) translate3d(0, 0, 0);
+    }
+  }
+
+  .card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #666;
+  }
+
+  /* پنجره اطلاعات زیر کادرها */
+  .info-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(30px);
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 1.5rem;
+    color: #fff;
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1000;
+    max-height: 60vh;
+    overflow-y: auto;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .info-panel.active {
+    transform: translateY(0);
+  }
+
+  .info-panel h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(45deg, #fff, #ccc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    direction: rtl;
+    text-align: center;
+  }
+
+  .info-panel p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    opacity: 0.95;
+    color: rgba(255, 255, 255, 0.95);
+    direction: rtl;
+    text-align: center;
+  }
+
+  .info-panel h4 {
+    font-size: 1.2rem;
+    margin: 1.5rem 0 1rem 0;
+    color: #fff;
+    direction: rtl;
+    text-align: center;
+    border-right: none;
+    padding-right: 0;
+  }
+
+  /* دکمه کپی دقیقاً مثل نمونه */
+  .copy-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+    direction: rtl;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .copy-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    flex-grow: 1;
+    text-align: center;
+    direction: rtl;
+    min-height: 45px;
+    width: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-right: 0.75rem;
+  }
+
+  .Btn {
+    width: 120px;
+    height: 45px;
+    background-color: rgb(65, 64, 64);
+    border: none;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.342);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .5s;
+  }
+
+  .text {
+    color: rgb(184, 236, 104);
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    z-index: 2;
+  }
+
+  .svgIcon {
+    z-index: 2;
+  }
+
+  .svgIcon path {
+    fill: rgb(184, 236, 104);
+  }
+
+  .Btn:hover {
+    color: rgb(230, 255, 193);
+  }
+
+  .effect {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(184, 236, 104);
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0;
+    transition-duration: .5s;
+  }
+
+  .Btn:hover .effect {
+    transform: scale(15);
+    transform-origin: center;
+    opacity: 1;
+    transition-duration: .5s;
+  }
+
+  .Btn:hover {
+    box-shadow: 0px 0px 5px rgb(184, 236, 104),
+    0px 0px 10px rgb(184, 236, 104),
+    0px 0px 30px rgb(184, 236, 104);
+    transition-duration: .7s;
+  }
+
+  .Btn:hover .text {
+    color: rgb(65, 64, 64);
+  }
+
+  .Btn:hover .svgIcon path {
+    fill: rgb(65, 64, 64);
+  }
+
+  .copy-success .text {
+    color: rgb(65, 64, 64) !important;
+  }
+
+  .copy-success .svgIcon path {
+    fill: rgb(65, 64, 64) !important;
+  }
+
+  .copy-success {
+    box-shadow: 0px 0px 5px rgb(184, 236, 104),
+    0px 0px 10px rgb(184, 236, 104),
+    0px 0px 30px rgb(184, 236, 104) !important;
+  }
+
+  .info-panel .close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .info-panel .close-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* انیمیشن برای محتوای پنجره */
+  .info-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .info-panel.active .info-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* بخش نمایش اطلاعات کادرها */
+  .info-display {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    color: #fff;
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1000;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .info-display.active {
+    transform: translateY(0);
+  }
+
+  .info-display h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #fff, #ccc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .info-display p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .info-display .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+  }
+
+  .info-display .close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  .light-effect {
+    position: fixed;
+    top: 140vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 30%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: lightPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes lightPulse {
+    0% {
+      opacity: 0.6;
+      transform: translateX(-50%) scale(1);
+    }
+    100% {
+      opacity: 0.9;
+      transform: translateX(-50%) scale(1.1);
+    }
+  }
+
+  .air-flow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .air-particle {
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1px;
+    animation: airFlow 3s linear infinite;
+  }
+
+  @keyframes airFlow {
+    0% {
+      transform: translateY(100px) rotate(0deg);
+      opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% {
+      transform: translateY(-100px) rotate(5deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fallDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-200px) rotateX(90deg) rotateZ(2deg);
+    }
+    10% {
+      opacity: 0.8;
+      transform: translateY(-150px) rotateX(80deg) rotateZ(-1deg);
+    }
+    30% {
+      opacity: 0.9;
+      transform: translateY(-50px) rotateX(20deg) rotateZ(1deg);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(10px) rotateX(-5deg) rotateZ(-0.5deg);
+    }
+    70% {
+      transform: translateY(-5px) rotateX(2deg) rotateZ(0.2deg);
+    }
+    85% {
+      transform: translateY(2px) rotateX(-1deg) rotateZ(-0.1deg);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg) rotateZ(0deg);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-400px) scale(0.8);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateX(-20px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(200px) scale(0.8);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateY(-20px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes slideInFromRight {
+    0% {
+      opacity: 0;
+      transform: translateX(400px) scale(0.8);
+    }
+    50% {
+      opacity: 0.7;
+      transform: translateX(20px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="splash"></canvas>
+
+<div class="text-container">
+  <div class="line" id="line1"></div>
+  <div class="line" id="line2"></div>
+</div>
+
+<div class="light-effect"></div>
+
+  <div class="cards-container">
+  <div class="card" data-card="about">
+    <div class="card-image animated-bg floating-shapes">
+      <div class="card-image-icon">👨‍💻</div>
+    </div>
+    <h3>About Me / درباره من</h3>
+    <p>Web Developer<br>Creative<br>Seeker of New Ideas</p>
+  </div>
+
+  <div class="card" data-card="portfolio">
+    <div class="card-image animated-bg-2 floating-shapes-2">
+      <div class="card-image-icon">🚀</div>
+    </div>
+    <h3>Portfolio / نمونه پروژه</h3>
+    <p>Modern Web Apps<br>React • TypeScript<br>Responsive Design</p>
+  </div>
+
+  <div class="card" data-card="contact">
+    <div class="card-image animated-bg-3">
+      <div class="card-image-icon">📧</div>
+    </div>
+    <h3>Contact / ارتباط با من</h3>
+    <p>Find me on:<br>Email • Telegram<br>Instagram • Phone</p>
+  </div>
+</div>
+
+<div class="air-flow" id="airFlowContainer"></div>
+
+<!-- پنل اطلاعات زیر کادرها -->
+<div class="info-panel" id="infoPanel">
+  <button class="close-btn" id="closePanel">&times;</button>
+  <div class="info-content" id="panelContent"></div>
+</div>
+
+<script>
+  const line1Text = "Hi, I'm Omid.";
+  const line2Text = "You can learn more about me here.";
+
+  const createAnimatedLine = (text, containerId, delayOffset = 0) => {
+    const container = document.getElementById(containerId);
+    text.split('').forEach((char, index) => {
+      const span = document.createElement('span');
+      span.innerHTML = char === ' ' ? '&nbsp;' : char;
+      span.className = 'char';
+      span.style.animationDelay = `${delayOffset + index * 0.05}s`;
+      container.appendChild(span);
+    });
+  };
+
+  createAnimatedLine(line1Text, 'line1', 0);
+  createAnimatedLine(line2Text, 'line2', line1Text.length * 0.05 + 0.3);
+
+    // ایجاد ذرات جریان هوا
+  function createAirParticles() {
+    const container = document.getElementById('airFlowContainer');
+    const cardCount = 3;
+
+    setInterval(() => {
+      for (let i = 0; i < cardCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'air-particle';
+
+        // موقعیت تصادفی در اطراف هر کارت
+        const card = document.querySelectorAll('.card')[i];
+        if (card) {
+          const cardRect = card.getBoundingClientRect();
+          const startX = Math.random() * cardRect.width + (cardRect.left - 150);
+          const startY = cardRect.bottom + 50;
+
+          particle.style.left = `${startX}px`;
+          particle.style.top = `${startY}px`;
+          particle.style.animationDelay = `${Math.random() * 2}s`;
+          particle.style.transformOrigin = 'center';
+
+          container.appendChild(particle);
+
+          // حذف ذره بعد از انیمیشن
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 3000);
+        }
+      }
+    }, window.innerWidth <= 768 ? 400 : 200); // کمتر ذره در موبایل برای بهبود عملکرد
+  }
+
+  // شروع ایجاد ذرات بعد از لود صفحه
+  window.addEventListener('load', () => {
+    // اسکرول به اول صفحه برای شبیه‌سازی باز شدن تازه صفحه
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 100);
+
+    setTimeout(createAirParticles, 2000);
+
+    // فعال کردن انیمیشن‌ها با اسکرول
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, observerOptions);
+
+    // مشاهده کادرها
+    document.querySelectorAll('.card').forEach(card => {
+      // اطمینان از اجرای انیمیشن‌ها در همه دستگاه‌ها
+      card.style.animationPlayState = 'running';
+      observer.observe(card);
+    });
+
+    // حذف ریست اجباری انیمیشن‌ها برای جلوگیری از مشکل نمایش در موبایل
+    // setTimeout(() => {
+    //   document.querySelectorAll('.card').forEach(card => {
+    //     card.style.animation = 'none';
+    //     card.offsetHeight; // trigger reflow
+    //     card.style.animation = '';
+    //     card.style.animationPlayState = 'running';
+    //   });
+    // }, 100);
+
+    // کنترل اسکرول برای جلوگیری از اسکرول پایین وقتی کادرها وسط صفحه هستند
+    let isScrollLocked = false;
+    const cardsContainer = document.querySelector('.cards-container');
+
+    window.addEventListener('scroll', () => {
+      // غیرفعال کردن کنترل اسکرول در موبایل برای جلوگیری از اختلال
+      if (window.innerWidth <= 768) return;
+
+      const containerTop = cardsContainer.offsetTop;
+      const containerHeight = cardsContainer.offsetHeight;
+      const scrollTop = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+
+      // اگر کادرها وسط صفحه هستند
+      if (scrollTop + windowHeight / 2 >= containerTop &&
+          scrollTop + windowHeight / 2 < containerTop + containerHeight) {
+        isScrollLocked = true;
+      } else {
+        isScrollLocked = false;
+      }
+
+      // اگر سعی در اسکرول پایین داریم و قفل فعال است، جلوگیری کن
+      if (isScrollLocked && window.pageYOffset > scrollTop) {
+        window.scrollTo(0, scrollTop);
+      }
+    });
+  });
+
+  // مدیریت پنل اطلاعات
+  function showCardInfo(cardType) {
+    const infoPanel = document.getElementById('infoPanel');
+    const panelContent = document.getElementById('panelContent');
+
+    // اطلاعات هر کادر
+    const cardData = {
+      about: {
+        title: '🟣 درباره من',
+        content: `
+          <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.2);">
+              <p style="font-size: 1.3rem; line-height: 2; margin-bottom: 1.5rem; color: rgba(255,255,255,0.95);">
+                سلام، من <strong style="color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">امید سامانی</strong>‌ام، متولد سال 80.
+              </p>
+              <p style="font-size: 1.3rem; line-height: 2; margin-bottom: 1.5rem; color: rgba(255,255,255,0.9);">
+                آدمی‌ام که همیشه دنبال رشد، یاد گرفتن چیزای جدید و ساختن مسیرهای خاص خودم بودم.
+              </p>
+              <p style="font-size: 1.2rem; line-height: 1.8; color: rgba(255,255,255,0.85);">
+                از همون اول عاشق تحلیل و فهمیدن بودم — چه توی بازارهای مالی، چه توی دنیای تکنولوژی و محتوا.
+              </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(78,205,196,0.15), rgba(78,205,196,0.05)); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(78,205,196,0.3);">
+              <h4 style="color: #4ecdc4; font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center; text-shadow: 0 0 10px rgba(78,205,196,0.5);">مسیر و طرز فکرم</h4>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                من همیشه فکر می‌کنم رشد واقعی وقتی اتفاق می‌افته که از مسیر سختا نترسی.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                ترید یادم داد که زندگی پر از ریسکه، ولی اگه یاد بگیری ریسک‌هاتو مدیریت کنی، هم رشد می‌کنی، هم آرامش پیدا می‌کنی.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                باور دارم شکست، بخشی از یاد گرفتنه، نه یه پایان.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                اگه یه چیزی از مسیرم یاد گرفته باشم، اینه که موفقیت یعنی ادامه دادن، مخصوصاً وقتی شرایط سخت می‌شه.
+              </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05)); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(255,107,107,0.3);">
+              <h4 style="color: #ff6b6b; font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center; text-shadow: 0 0 10px rgba(255,107,107,0.5);">کارایی که تا الان کردم</h4>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem; color: rgba(255,255,255,0.9);">
+                تو این چند سال، توی چند حوزه به‌صورت جدی کار کردم و تجربه گرفتم:
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <span style="color: #ff6b6b; font-size: 1.2rem;">🎯</span>
+                  <p style="margin: 0.5rem 0 0 0; color: rgba(255,255,255,0.9);">تریدینگ و تحلیل بازارهای مالی، مخصوصاً روی ساخت استراتژی و درک رفتار بازار.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <span style="color: #ff6b6b; font-size: 1.2rem;">💼</span>
+                  <p style="margin: 0.5rem 0 0 0; color: rgba(255,255,255,0.9);">مدیریت پلتفرم پراپ تریدینگ و طراحی مدل‌هایی که تریدر و سرمایه‌گذار بتونن توی یه سیستم شفاف کنار هم کار کنن.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <span style="color: #ff6b6b; font-size: 1.2rem;">💡</span>
+                  <p style="margin: 0.5rem 0 0 0; color: rgba(255,255,255,0.9);">دیجیتال مارکتینگ و تولید محتوا؛ از کمپین‌های تبلیغاتی گرفته تا تحلیل رفتار کاربرا و استراتژی محتوا.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <span style="color: #ff6b6b; font-size: 1.2rem;">🤖</span>
+                  <p style="margin: 0.5rem 0 0 0; color: rgba(255,255,255,0.9);">کار با هوش مصنوعی و اتوماسیون محتوا؛ ساخت ایجنت‌ها، ابزارهای هوشمند و پروژه‌های تحلیل داده.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <span style="color: #ff6b6b; font-size: 1.2rem;">🧠</span>
+                  <p style="margin: 0.5rem 0 0 0; color: rgba(255,255,255,0.9);">برنامه‌ریزی و ایده‌پردازی استراتژیک برای پروژه‌های مرتبط با فین‌تک، ترید و آموزش.</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(69,183,209,0.15), rgba(69,183,209,0.05)); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(69,183,209,0.3);">
+              <h4 style="color: #45b7d1; font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center; text-shadow: 0 0 10px rgba(69,183,209,0.5);">سبک کاری و اخلاق کاری</h4>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                توی کارم دقت و نظم برام خیلی مهمه، ولی از خلاقیت جدا نیستم.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                منطق و تخیل، دو بال اصلی کار منن.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                از پروژه‌هایی خوشم میاد که یه معنی واقعی پشتشون باشه و حس کنم دارم یه چیزی می‌سازم که ارزش داره.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                اهل کار تیمی‌ام، ولی اگه لازم باشه تنهایی هم تا تهش می‌رم.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                از اونایی‌ام که وقتی چیزی بلد نیستم، تا نفهممش ول نمی‌کنم.
+              </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.2);">
+              <h4 style="color: #fff; font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center; text-shadow: 0 0 10px rgba(255,255,255,0.5);">آینده و هدف‌هام</h4>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                یکی از هدف‌هام ساخت یه سیستم هوشمند بین سرمایه‌گذاری، تریدینگ و آموزشه؛ جایی که هم تریدر رشد کنه، هم سرمایه‌گذار حس امنیت و سود واقعی داشته باشه.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                از طرفی دوست دارم از هوش مصنوعی برای ساده‌تر کردن مسیر یادگیری و تصمیم‌گیری استفاده کنم، چه توی بازار مالی، چه توی محتوا و بیزینس.
+              </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.15);">
+              <h4 style="color: rgba(255,255,255,0.9); font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center;">چیزایی که برام مهمه</h4>
+              <p style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 1rem; color: rgba(255,255,255,0.9);">
+                علاوه بر کار، خیلی به روان‌شناسی، رشد فردی، موسیقی و داستان‌گویی علاقه دارم.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                باور دارم تعادل یعنی اینکه هم ذهنت منطقی باشه، هم روحت زنده.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.9; color: rgba(255,255,255,0.85);">
+                برای من صداقت، استمرار و اثرگذاری واقعی خیلی مهم‌تر از ظاهر کاره.
+              </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); border-radius: 20px; padding: 2rem; border: 1px solid rgba(255,255,255,0.25); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #ff6b6b); animation: gradientMove 3s ease-in-out infinite;"></div>
+              <h4 style="color: #fff; font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center; text-shadow: 0 0 15px rgba(255,255,255,0.3);">چند خط آخر</h4>
+              <p style="font-size: 1.1rem; line-height: 2; margin-bottom: 1rem; color: rgba(255,255,255,0.95); font-style: italic;">
+                اگه بخوام خودمو تو چند کلمه خلاصه کنم، می‌گم:
+              </p>
+              <p style="font-size: 1.2rem; line-height: 2; margin: 1rem auto; color: #fff; font-weight: 600; text-shadow: 0 0 10px rgba(255,255,255,0.4); max-width: 400px;">
+                «یه آدم کنجکاو که عاشق یادگیری و ساختنه.»
+              </p>
+              <p style="font-size: 1.05rem; line-height: 1.9; color: rgba(255,255,255,0.9);">
+                برای من مسیر از مقصد مهم‌تره، چون باور دارم هر قدمی که با نیت درست برداشته بشه، یه تیکه از آینده رو می‌سازه.
+              </p>
+            </div>
+          </div>
+
+          <style>
+            @keyframes gradientMove {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+          </style>
+        `
+      },
+      portfolio: {
+        title: '🟣 پروژه‌های حرفه‌ای منتخب',
+        content: `
+          <div style="max-width: 900px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+              <h4 style="color: #fff; font-size: 1.4rem; margin-bottom: 1rem; text-shadow: 0 0 10px rgba(255,255,255,0.5);">مجموعه پروژه‌های حرفه‌ای من</h4>
+              <p style="color: rgba(255,255,255,0.9); font-size: 1.05rem; line-height: 1.6;">هر پروژه‌ای که روش کار کردم، فرصتی برای یادگیری و خلق ارزش واقعی بوده. اینجا چند تا از مهم‌ترین پروژه‌هامو براتون معرفی می‌کنم:</p>
+            </div>
+
+            <!-- پروژه 1 -->
+            <div style="background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,107,107,0.05)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(255,107,107,0.3); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff6b6b, transparent, #ff6b6b);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">1️⃣</span>
+                <h4 style="color: #ff6b6b; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(255,107,107,0.5);">پلتفرم پراپ‌تریدینگ ایرانی</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ایجاد یک سیستم امن و شفاف برای اتصال تریدرها و سرمایه‌گذاران خرد</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی مدل همکاری، تقسیم سود، نظارت بر عملکرد تریدرها</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b; margin-bottom: 1rem;">
+                <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">تحلیل بازار، مدیریت پروژه، UX/UI، مدل مالی</p>
+              </div>
+
+              <div style="background: rgba(76,205,196,0.15); padding: 1rem; border-radius: 10px; border: 2px solid #4ecdc4;">
+                <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">نمونه اولیه با امکان فعالیت چند تریدر روی یک حساب و کنترل کامل</p>
+              </div>
+            </div>
+
+            <!-- پروژه 2 -->
+            <div style="background: linear-gradient(135deg, rgba(78,205,196,0.15), rgba(78,205,196,0.05)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(78,205,196,0.3); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4ecdc4, transparent, #4ecdc4);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">2️⃣</span>
+                <h4 style="color: #4ecdc4; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(78,205,196,0.5);">کمپین نوروزی فروش حساب‌های ترید</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #4ecdc4;">
+                  <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">جذب کاربران و فروش حساب‌های ۱۰ و ۱۵ هزار دلاری</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #4ecdc4;">
+                  <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی کمپین، پیام تبلیغاتی، استراتژی قیمت‌گذاری</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #4ecdc4; margin-bottom: 1rem;">
+                <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">دیجیتال مارکتینگ، تحلیل مخاطب، تولید محتوا</p>
+              </div>
+
+              <div style="background: rgba(255,107,107,0.15); padding: 1rem; border-radius: 10px; border: 2px solid #ff6b6b;">
+                <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">کمپین جذاب و آماده اجرا با تمرکز روی تبدیل مشتری</p>
+              </div>
+            </div>
+
+            <!-- پروژه 3 -->
+            <div style="background: linear-gradient(135deg, rgba(69,183,209,0.15), rgba(69,183,209,0.05)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(69,183,209,0.3); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #45b7d1, transparent, #45b7d1);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">3️⃣</span>
+                <h4 style="color: #45b7d1; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(69,183,209,0.5);">پروژه ایزی پوزیشن</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #45b7d1;">
+                  <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی ابزاری برای مدیریت و ثبت موقعیت‌های ترید به‌صورت ساده و هوشمند</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #45b7d1;">
+                  <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی رابط کاربری، تعریف پرامپت‌ها، ساخت ابزار خودکار</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #45b7d1; margin-bottom: 1rem;">
+                <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">برنامه‌نویسی، اتوماسیون ترید، UX/UI</p>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3);">
+                <h5 style="color: rgba(255,255,255,0.9); margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ابزار کاربردی که تریدرها می‌تونن موقعیت‌ها و سود/ضررها رو مدیریت کنن</p>
+              </div>
+            </div>
+
+            <!-- پروژه 4 -->
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(255,255,255,0.2); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #fff, transparent, #fff);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">4️⃣</span>
+                <h4 style="color: #fff; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(255,255,255,0.5);">پروژه ژورنال هوشمند</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #fff;">
+                  <h5 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ثبت و تحلیل خودکار معاملات برای بهبود تصمیم‌گیری تریدرها</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #fff;">
+                  <h5 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی سیستم ثبت معاملات، تحلیل داده و تولید گزارش‌های هوشمند</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #fff; margin-bottom: 1rem;">
+                <h5 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">برنامه‌نویسی، تحلیل داده، هوش مصنوعی، UX</p>
+              </div>
+
+              <div style="background: rgba(78,205,196,0.15); padding: 1rem; border-radius: 10px; border: 2px solid #4ecdc4;">
+                <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ژورنال هوشمند با گزارش‌دهی خودکار و قابلیت تحلیل روند معاملات</p>
+              </div>
+            </div>
+
+            <!-- پروژه 5 -->
+            <div style="background: linear-gradient(135deg, rgba(255,107,107,0.12), rgba(255,107,107,0.04)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(255,107,107,0.25); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #ff6b6b, transparent, #ff6b6b);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">5️⃣</span>
+                <h4 style="color: #ff6b6b; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(255,107,107,0.4);">سیستم چک تریدهای خبری</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">پایش اخبار بازار و اطلاع‌رسانی سریع به تریدرها</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b;">
+                  <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی سیستم دریافت و پردازش اخبار، هشدار خودکار</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #ff6b6b; margin-bottom: 1rem;">
+                <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">Python، API، اتوماسیون، تحلیل داده</p>
+              </div>
+
+              <div style="background: rgba(69,183,209,0.15); padding: 1rem; border-radius: 10px; border: 2px solid #45b7d1;">
+                <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ابزار عملی برای تصمیم‌گیری سریع بر اساس اخبار و تغییرات بازار</p>
+              </div>
+            </div>
+
+            <!-- پروژه 6 -->
+            <div style="background: linear-gradient(135deg, rgba(78,205,196,0.12), rgba(78,205,196,0.04)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(78,205,196,0.25); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #4ecdc4, transparent, #4ecdc4);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">6️⃣</span>
+                <h4 style="color: #4ecdc4; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(78,205,196,0.4);">سرتیفیکیت دیجیتال 3D</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #4ecdc4;">
+                  <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ارائه مدرک برداشت سود و تشویق تریدرها</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #4ecdc4;">
+                  <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی استایل شیشه‌ای، انتخاب فونت فارسی، نوشتن پرامپت AI</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #4ecdc4; margin-bottom: 1rem;">
+                <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی دیجیتال، AI، گرافیک سه‌بعدی</p>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.12); padding: 1rem; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3);">
+                <h5 style="color: rgba(255,255,255,0.9); margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">سرتیفیکیت حرفه‌ای با جلوه مدرن و قابل انتشار</p>
+              </div>
+            </div>
+
+            <!-- پروژه 7 -->
+            <div style="background: linear-gradient(135deg, rgba(69,183,209,0.12), rgba(69,183,209,0.04)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(69,183,209,0.25); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #45b7d1, transparent, #45b7d1);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">7️⃣</span>
+                <h4 style="color: #45b7d1; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(69,183,209,0.4);">سیستم تولید محتوای خودکار با AI</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #45b7d1;">
+                  <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">اتوماسیون تحلیل بازار کریپتو و تولید محتوا</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #45b7d1;">
+                  <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی ایجنت، پرامپت‌ها، سیستم تولید خودکار</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #45b7d1; margin-bottom: 1rem;">
+                <h5 style="color: #45b7d1; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">OpenAI API، Python، هوش مصنوعی</p>
+              </div>
+
+              <div style="background: rgba(255,107,107,0.15); padding: 1rem; border-radius: 10px; border: 2px solid #ff6b6b;">
+                <h5 style="color: #ff6b6b; margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">تولید محتوای روزانه بدون دخالت مستقیم</p>
+              </div>
+            </div>
+
+            <!-- پروژه 8 -->
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); border-radius: 20px; margin-bottom: 1.5rem; padding: 2rem; border: 1px solid rgba(255,255,255,0.15); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #fff, transparent, #fff);"></div>
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.5rem; margin-left: 0.5rem;">8️⃣</span>
+                <h4 style="color: #fff; font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(255,255,255,0.3);">مسیر یادگیری و تولید محتوا با AI</h4>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #fff;">
+                  <h5 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1rem;">🎯 هدف</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">ساخت سیستم کسب درآمد از تحلیل داده، محتوا و پروژه‌های دیجیتال</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #fff;">
+                  <h5 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1rem;">🧠 نقش من</h5>
+                  <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">طراحی مسیر قدم‌به‌قدم، انتخاب منابع و تمرین‌های عملی</p>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; border-left: 4px solid #fff; margin-bottom: 1rem;">
+                <h5 style="color: #fff; margin: 0 0 0.5rem 0; font-size: 1rem;">🧰 مهارت‌ها</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">تحلیل داده، دیجیتال مارکتینگ، AI، برنامه‌ریزی آموزشی</p>
+              </div>
+
+              <div style="background: rgba(78,205,196,0.15); padding: 1rem; border-radius: 10px; border: 2px solid #4ecdc4;">
+                <h5 style="color: #4ecdc4; margin: 0 0 0.5rem 0; font-size: 1rem;">✅ نتیجه</h5>
+                <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.5;">برنامه جامع یادگیری و کسب درآمد عملی</p>
+              </div>
+            </div>
+
+            <!-- بخش پایانی -->
+            <div style="text-align: center; margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); border-radius: 20px; border: 1px solid rgba(255,255,255,0.25);">
+              <h4 style="color: #fff; font-size: 1.3rem; margin-bottom: 1rem; text-shadow: 0 0 10px rgba(255,255,255,0.4);">رویکرد من به پروژه‌ها</h4>
+              <p style="color: rgba(255,255,255,0.9); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1rem;">
+                هر پروژه‌ای که روش کار کردم، نه تنها یک محصول فنی بوده، بلکه فرصتی برای یادگیری و رشد شخصی هم محسوب می‌شده.
+              </p>
+              <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; line-height: 1.7;">
+                همیشه سعی می‌کنم از جدیدترین تکنولوژی‌ها و بهترین روش‌های برنامه‌نویسی استفاده کنم تا نتیجه نهایی، هم از نظر عملکرد و هم از نظر تجربه کاربری، عالی باشه.
+              </p>
+            </div>
+          </div>
+        `
+      },
+      contact: {
+        title: 'Contact Information',
+        content: `
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <p style="margin-bottom: 1.5rem; opacity: 0.9;">Hello! I'm glad you visited my page.</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1.2rem; align-items: center; max-width: 500px; margin: 0 auto;">
+
+            <div class="copy-container">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);"> Email:</span>
+              </div>
+              <div class="copy-text">omidmoghiseh80@gmail.com</div>
+              <button class="Btn" onclick="copyToClipboard('omidmoghiseh80@gmail.com', this)">
+                <svg viewBox="0 0 512 512" class="svgIcon" height="1em"><path d="M288 448H64V224h64V160H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64zm-64-96H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64z"></path></svg>
+                <p class="text">COPY</p>
+                <span class="effect"></span>
+              </button>
+            </div>
+
+            <div class="copy-container">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);"> Phone:</span>
+              </div>
+              <div class="copy-text">09052375787</div>
+              <button class="Btn" onclick="copyToClipboard('09052375787', this)">
+                <svg viewBox="0 0 512 512" class="svgIcon" height="1em"><path d="M288 448H64V224h64V160H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64zm-64-96H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64z"></path></svg>
+                <p class="text">COPY</p>
+                <span class="effect"></span>
+              </button>
+            </div>
+
+            <div class="copy-container">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);"> Telegram:</span>
+              </div>
+              <div class="copy-text">@Arad_samani</div>
+              <button class="Btn" onclick="copyToClipboard('@Arad_samani', this)">
+                <svg viewBox="0 0 512 512" class="svgIcon" height="1em"><path d="M288 448H64V224h64V160H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64zm-64-96H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64z"></path></svg>
+                <p class="text">COPY</p>
+                <span class="effect"></span>
+              </button>
+            </div>
+
+            <div class="copy-container">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);"> Instagram:</span>
+              </div>
+              <div class="copy-text">@ar.69.ad</div>
+              <button class="Btn" onclick="copyToClipboard('@ar.69.ad', this)">
+                <svg viewBox="0 0 512 512" class="svgIcon" height="1em"><path d="M288 448H64V224h64V160H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64zm-64-96H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64z"></path></svg>
+                <p class="text">COPY</p>
+                <span class="effect"></span>
+              </button>
+            </div>
+
+          </div>
+
+          <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.5rem;">🌐 LinkedIn: -----</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">📍 Location: Tehran, Iran</p>
+          </div>
+
+          <div style="text-align: center; margin-top: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
+            <p style="font-size: 0.9rem; line-height: 1.5; opacity: 0.9;">💬 I usually respond within 24 hours</p>
+            <p style="font-size: 0.85rem; opacity: 0.7;">Free consultation session for new projects</p>
+          </div>
+        `
+      }
+    };
+
+    // نمایش اطلاعات کادر انتخابی
+    const data = cardData[cardType];
+    panelContent.innerHTML = `<h2>${data.title}</h2>${data.content}`;
+
+    // فعال کردن انیمیشن نمایش پنل
+    infoPanel.classList.add('active');
+
+    // اسکرول به پنل اطلاعات
+    infoPanel.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // بستن پنل اطلاعات
+  function closeCardInfo() {
+    const infoPanel = document.getElementById('infoPanel');
+    infoPanel.classList.remove('active');
+  }
+
+  // تابع کپی به کلیپ‌بورد
+  async function copyToClipboard(text, button) {
+    try {
+      await navigator.clipboard.writeText(text);
+
+      // تغییر ظاهر دکمه به حالت موفقیت
+      button.classList.add('copy-success');
+      const textElement = button.querySelector('.text');
+      const originalText = textElement.textContent;
+      textElement.textContent = 'COPIED!';
+
+      // بعد از ۲ ثانیه به حالت اولیه برگردد
+      setTimeout(() => {
+        button.classList.remove('copy-success');
+        textElement.textContent = originalText;
+      }, 2000);
+
+    } catch (err) {
+      console.error('خطا در کپی کردن:', err);
+
+      // روش جایگزین برای مرورگرهای قدیمی
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        button.classList.add('copy-success');
+        const textElement = button.querySelector('.text');
+        const originalText = textElement.textContent;
+        textElement.textContent = 'COPIED!';
+
+        setTimeout(() => {
+          button.classList.remove('copy-success');
+          textElement.textContent = originalText;
+        }, 2000);
+
+      } catch (fallbackErr) {
+        console.error('روش جایگزین هم کار نکرد:', fallbackErr);
+      }
+
+      document.body.removeChild(textArea);
+    }
+  }
+
+  // اضافه کردن event listener به کادرها
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach((card) => {
+      card.addEventListener('click', function() {
+        const cardType = this.dataset.card;
+        showCardInfo(cardType);
+      });
+    });
+
+    // اضافه کردن event listener به دکمه بستن
+    const closeBtn = document.getElementById('closePanel');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeCardInfo);
+    }
+
+    // بستن پنل با کلیک خارج از آن
+    const infoPanel = document.getElementById('infoPanel');
+    infoPanel.addEventListener('click', function(e) {
+      if (e.target === infoPanel) {
+        closeCardInfo();
+      }
+    });
+  });
+</script>
+
+<script type="module">
+  // غیرفعال کردن SplashCursor برای موبایل
+  if (window.innerWidth > 768) {
+    try {
+      const script = document.createElement('script');
+      script.src = 'SplashCursor.js';
+      script.onload = () => {
+        const splash = new SplashCursor({ TRANSPARENT: true });
+        const oldCanvas = document.getElementById('splash');
+        if (oldCanvas) {
+          oldCanvas.replaceWith(splash.canvas);
+          splash.canvas.id = 'splash';
+        }
+      };
+      document.head.appendChild(script);
+    } catch (error) {
+      console.log('SplashCursor not available');
+    }
+  } else {
+    // برای موبایل، یک background gradient ساده استفاده کن
+    const canvas = document.getElementById('splash');
+    if (canvas) {
+      canvas.style.background = 'linear-gradient(45deg, #000, #111, #000)';
+      canvas.style.animation = 'gradientShift 10s ease infinite';
+    }
+  }
+</script>
+
+<style>
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+</style>
+
+</body>
+</html>
