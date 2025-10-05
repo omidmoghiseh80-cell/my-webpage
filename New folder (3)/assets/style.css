@@ -1,0 +1,54 @@
+/* Global additions for external stylesheet without interfering existing inline styles */
+
+/* Header mount container and component styles */
+#site-header {
+  position: relative;
+  z-index: 1000; /* above canvas and background */
+}
+
+.site-header {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.site-header .brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.site-header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.site-header a {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.site-header a:hover {
+  opacity: 1;
+}
+
+/* Fixed background image layer behind all content */
+.bg-image {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* above canvas (-2) and below content to show image */
+  pointer-events: none;
+  background: transparent url('./images/cubes-bg.svg') center / cover no-repeat;
+}
+
+/* Optional darkness overlay when needed */
+.bg-image::after {
+  content: none; /* remove overlay */
+}
