@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>قوانین و ضوابط | Trader Gap</title>
+  <meta name="description" content="قوانین و ضوابط دورهمی‌های Trader Gap" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!--
+    نکته: اگر روی سایت فونت فارسی سازمانی دارید، می‌توانید اینجا جایگزین کنید.
+    این فایل بدون وابستگی بیرونی نوشته شده تا راحت روی وردپرس قرار بگیرد.
+  -->
+  <style>
+    :root{
+      --bg: #2B2B2B;
+      --surface: #2B2B2B;
+      --surface2:#1A1A1A;
+      --text: #F5F5F5;
+      --muted:#C8C8C8;
+      --accent:#F28C28;
+      --danger:#FB7185;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 18px 50px rgba(0,0,0,.55);
+      --shadow-soft: 0 12px 34px rgba(0,0,0,.45);
+
+      --radius: 18px;
+      --radius-sm: 12px;
+      --maxw: 980px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: 'Vazirmatn', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.9;
+    }
+
+    
+
+    a{ color: var(--accent); text-decoration: none; transition: color .2s ease; }
+    a:hover{ color: #ff9d42; }
+
+    ::selection{
+      background: rgba(242,140,40,.28);
+      color: #fff;
+    }
+
+    .wrap{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 28px 16px 70px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #progress{
+      position: fixed;
+      top:0;
+      left:0;
+      height: 3px;
+      width: 0;
+      background: var(--accent);
+      box-shadow: 0 6px 16px rgba(242,140,40,.26);
+      z-index: 9999;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      user-select:none;
+    }
+
+    .logo{
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: transparent;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: .3px;
+      color: #fff;
+    }
+    .brand .sub{
+      margin:0;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    .hero{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 18px 14px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background: none;
+      opacity: 0;
+    }
+
+    .hero-inner{ position: relative; }
+    .hero h2{
+      margin:0 0 10px 0;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .hero p{
+      margin:0;
+      color: var(--muted);
+      font-size: 14.5px;
+      max-width: 68ch;
+    }
+
+    .meta{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+    }
+
+    .meta .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(242,140,40,.18);
+    }
+
+    .section{
+      margin-top: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 4px 6px 10px;
+      border-bottom: 1px solid rgba(234,240,255,.10);
+      margin-bottom: 10px;
+    }
+    .section-head h3{
+      margin:0;
+      font-size: 16px;
+    }
+    .section-head small{
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    .accordion{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      padding: 6px;
+    }
+
+    details{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow:hidden;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    details:hover{
+      transform: translateY(-1px);
+      border-color: rgba(242,140,40,.35);
+    }
+    details[open]{
+      border-color: rgba(242,140,40,.28);
+      background: linear-gradient(180deg, rgba(242,140,40,.08), rgba(255,255,255,.02));
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      user-select:none;
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border-right: 3px solid transparent;
+      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    summary:hover{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-right-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(0,0,0,.18);
+    }
+    summary:active{ transform: translateY(1px); }
+
+    .sum-left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .num{
+      flex: 0 0 auto;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      display:grid;
+      place-items:center;
+      background: rgba(242,140,40,.12);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+      border: 1px solid rgba(242,140,40,.25);
+    }
+    .title{
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .25px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    summary:hover .title{ color: #fff; }
+    details[open] .title{ color: var(--text); }
+    .chev{
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.05);
+      display:grid;
+      place-items:center;
+      color: var(--muted);
+      position: relative;
+      transition: transform .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .chev:before{
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 14px;
+      box-shadow: 0 0 0 3px rgba(242,140,40,.16);
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+    summary:hover .chev:before{ opacity: 1; }
+    details[open] .chev{
+      transform: rotate(180deg);
+      color: var(--accent);
+      border-color: rgba(242,140,40,.35);
+      background: rgba(242,140,40,.10);
+      box-shadow: 0 8px 24px rgba(242,140,40,.16);
+    }
+    summary:hover .chev{ color: #ff9d42; }
+    summary:focus-visible .chev{ outline: 2px solid rgba(242,140,40,.65); outline-offset: 2px; }
+
+    .content{
+      padding: 0 16px 16px;
+      color: var(--muted);
+      font-size: 14.2px;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-4px);
+      overflow: hidden;
+      transition: max-height .25s ease, opacity .22s ease, transform .22s ease;
+    }
+
+    .content p{ margin: 10px 0 0; }
+    .content ul{
+      margin: 10px 0 0;
+      padding: 0 18px 0 0;
+      list-style: none;
+    }
+    .content li{
+      margin: 6px 0;
+      position: relative;
+      padding-right: 16px;
+    }
+    .content li:before{
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(242,140,40,.18);
+    }
+
+    .note{
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(255,255,255,.20);
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 13.5px;
+      position: relative;
+    }
+    .note:before{
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 3px 0 0 3px;
+    }
+    .note strong{ color: var(--text); }
+
+    .reveal{ opacity: 0; transform: translateY(10px); transition: opacity .35s ease, transform .35s ease; }
+    .reveal.in{ opacity: 1; transform: none; }
+
+    details[open] .content{ max-height: 1000px; opacity: 1; transform: none; }
+
+    
+
+    @media (max-width: 520px){
+      .hero h2{ font-size: 20px; }
+      summary{ padding: 12px; }
+      .content{ padding: 0 12px 14px; }
+      .pill{ display:none; }
+    }
+
+    @media print{
+      body{ background: #fff; color: #000; }
+      .hero, .section, .footer{ box-shadow:none; }
+      .pill, .btn{ display:none !important; }
+      details{ break-inside: avoid; }
+      details{ border: 1px solid #bbb; }
+      .content{ color: #111; }
+      .brand .sub{ color:#333; }
+      #progress{ display:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="progress"></div>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand" aria-label="Trader Gap">
+        <img class="logo" src="لوگو.png" alt="لوگوی Trader Gap" />
+        <div>
+          <h1>Trader Gap</h1>
+          <p class="sub">دورهمی آفلاین تریدرها</p>
+        </div>
+      </div>
+      <div class="pill" title="نسخه قوانین">
+        <span class="dot" aria-hidden="true"></span>
+        <span>قوانین و ضوابط — نسخه وب</span>
+      </div>
+    </div>
+
+    <section class="hero reveal" aria-label="قوانین و ضوابط">
+      <div class="hero-inner">
+        <h2>قوانین و ضوابط Trader Gap</h2>
+        <p>
+          چرا این قوانین هست؟<br>
+          این قوانین برای سخت‌گیری نیست؛ فقط کمک می‌کنن دورهمی‌های Trader Gap امن، راحت و باحال باقی بمونه.<br>
+          وقتی چند نفر با تجربه‌ها و دیدگاه‌های مختلف کنار هم جمع می‌شن، یه چارچوب ساده باعث می‌شه فضا برای همه منصفانه و خوشایند باشه.<br>
+          هدف این قوانین، محافظت از کیفیت جمع هست.
+        </p>
+
+        
+      </div>
+    </section>
+
+    <section class="section reveal" aria-label="آکاردئون قوانین">
+      <div class="section-head">
+        <h3>مطالعه بندها</h3>
+        <small>برای باز/بسته کردن هر بند، روی عنوان کلیک کنید.</small>
+      </div>
+
+      <div class="accordion">
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">1</div>
+              <div class="title">ماهیت فعالیت Trader Gap</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>Trader Gap برگزارکننده دورهمی‌های آفلاین با هدف ایجاد ارتباط، گفتگو و آشنایی بین تریدرهاست. فعالیت این مجموعه صرفاً اجتماعی و ارتباط‌محور است و Trader Gap <strong>هیچ‌گونه آموزش، تحلیل، مشاوره یا سیگنال سرمایه‌گذاری</strong> ارائه نمی‌دهد.</p>
+            <p>شرکت در دورهمی‌ها به‌معنای حضور در یک فضای گفت‌وگومحور و تجربی است، نه دریافت خدمات مالی یا آموزشی.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">2</div>
+              <div class="title">عدم ارائه توصیه مالی و مسئولیت تصمیمات</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>تمام گفتگوها و تعاملات شکل‌گرفته در دورهمی‌ها، نظرات و تجربه‌های شخصی افراد است. هرگونه تصمیم مالی یا معاملاتی، چه در زمان دورهمی و چه پس از آن، <strong>کاملاً بر عهده خود افراد</strong> خواهد بود.</p>
+            <p>Trader Gap هیچ مسئولیتی در قبال سود یا ضرر احتمالی، تصمیمات معاملاتی، یا نتایج مستقیم/غیرمستقیم گفتگوها ندارد.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">3</div>
+              <div class="title">حداقل سن شرکت‌کنندگان</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>شرکت در دورهمی‌های Trader Gap تنها برای افراد <strong>۱۸ سال به بالا</strong> مجاز است. کاربران با ثبت‌نام در سایت، صحت اطلاعات سنی خود را تأیید می‌کنند.</p>
+            <p>در صورت احراز مغایرت سنی، Trader Gap این حق را دارد که ثبت‌نام کاربر را لغو کرده و از حضور وی در دورهمی جلوگیری کند. در این شرایط، مبلغ پرداخت‌شده قابل عودت نخواهد بود.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">4</div>
+              <div class="title">ثبت‌نام فردی و عدم امکان همراه</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>ثبت‌نام در تمامی دورهمی‌های Trader Gap <strong>صرفاً به‌صورت فردی</strong> انجام می‌شود. شرکت‌کنندگان مجاز به همراه آوردن شخص دیگر (دوست، همکار، شریک یا آشنا) نیستند، حتی اگر ثبت‌نام جداگانه انجام نشده باشد.</p>
+            <p>این قانون برای حفظ کیفیت تعاملات، رعایت گروه‌بندی‌ها و ایجاد فضای امن و متعادل برای همه افراد است.</p>
+            <p>در صورت عدم رعایت، تیم Trader Gap مجاز است از ورود فرد یا افراد همراه جلوگیری کرده یا حضور شرکت‌کننده را لغو کند؛ بدون الزام به بازگشت وجه.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">5</div>
+              <div class="title">صحت اطلاعات پروفایل و هویت کاربران</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>کاربران موظف‌اند پروفایل خود را با <strong>اطلاعات واقعی، دقیق و شخصی</strong> تکمیل کنند. اطلاعات واردشده (از جمله سن، جنسیت، تصویر پروفایل و پاسخ‌های پرسشنامه) مبنای برنامه‌ریزی و گروه‌بندی دورهمی‌هاست.</p>
+            <p>در صورتی که اطلاعات ارائه‌شده غیرواقعی، ناقص یا گمراه‌کننده باشد یا با هویت واقعی فرد مغایرت جدی داشته باشد، Trader Gap حق دارد ثبت‌نام یا رزرو کاربر را لغو کند. در این حالت، مبلغ پرداخت‌شده عودت داده نخواهد شد.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">6</div>
+              <div class="title">قوانین رفتاری در دورهمی‌ها</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>برای حفظ فضای محترمانه و حرفه‌ای، رعایت موارد زیر الزامی است:</p>
+            <ul>
+              <li>احترام کامل به سایر شرکت‌کنندگان</li>
+              <li>پرهیز از هرگونه رفتار توهین‌آمیز، آزاردهنده یا تنش‌زا</li>
+              <li>ممنوعیت تبلیغ، فروش، جذب مشتری یا معرفی خدمات و محصولات</li>
+              <li>ممنوعیت ارائه سیگنال، توصیه معاملاتی یا تبلیغ پلتفرم‌های مالی</li>
+            </ul>
+            <p>در صورت تشخیص رفتار مغایر با این چارچوب، تیم Trader Gap حق تذکر، محدودسازی یا حذف فرد از دورهمی را دارد.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">7</div>
+              <div class="title">حریم خصوصی و اطلاعات شرکت‌کنندگان</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>اطلاعات کاربران نزد Trader Gap محرمانه تلقی می‌شود و پیش از دورهمی در اختیار سایر افراد قرار نخواهد گرفت.</p>
+            <p>شرکت‌کنندگان نیز موظف‌اند از انتشار اطلاعات شخصی دیگران بدون رضایت آن‌ها خودداری کرده و حریم خصوصی افراد حاضر را محترم بشمارند. هرگونه سوءاستفاده از اطلاعات دیگران خارج از مسئولیت Trader Gap خواهد بود.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">8</div>
+              <div class="title">عکاسی و استفاده از تصاویر</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>ممکن است در طول دورهمی‌ها عکس یا ویدیو تهیه شود. این محتوا صرفاً برای معرفی فضا و فعالیت‌های Trader Gap استفاده خواهد شد.</p>
+            <p>انتشار تصویر چهره افراد تنها با رضایت آن‌ها انجام می‌شود. در صورت عدم تمایل به حضور در تصاویر، لطفاً موضوع را به تیم اجرایی اطلاع دهید.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">9</div>
+              <div class="title">زمان، مکان و حضور در دورهمی</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>اطلاعات دقیق زمان و مکان دورهمی در روز برگزاری از طریق اعلان‌ها ارسال می‌شود. ثبت‌نام به‌منزله رزرو قطعی است.</p>
+            <p>عدم حضور بدون اطلاع قبلی ممکن است منجر به محدودیت در ثبت‌نام‌های بعدی یا اولویت پایین‌تر در دورهمی‌های آینده شود.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">10</div>
+              <div class="title">تغییر یا لغو دورهمی</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>Trader Gap در صورت بروز شرایط خارج از کنترل (مانند مسائل اجرایی یا محدودیت‌های پیش‌بینی‌نشده)، حق تغییر زمان یا مکان دورهمی را دارد.</p>
+            <p>در صورت لغو کامل، اطلاع‌رسانی انجام خواهد شد و وضعیت بازگشت وجه مطابق شرایط اعلام‌شده بررسی می‌شود.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">11</div>
+              <div class="title">مسئولیت وسایل شخصی</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>مسئولیت نگهداری از وسایل شخصی (مانند موبایل، لپ‌تاپ، کیف پول و سایر متعلقات) در طول دورهمی بر عهده خود شرکت‌کنندگان است. Trader Gap مسئولیتی در قبال مفقود شدن، سرقت یا آسیب به وسایل شخصی نخواهد داشت.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>
+            <div class="sum-left">
+              <div class="num">12</div>
+              <div class="title">به‌روزرسانی قوانین</div>
+            </div>
+            <div class="chev" aria-hidden="true">⌄</div>
+          </summary>
+          <div class="content">
+            <p>این قوانین ممکن است در طول زمان به‌روزرسانی شوند. ادامه استفاده از خدمات Trader Gap به‌منزله پذیرش آخرین نسخه قوانین خواهد بود.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="note" role="note">
+        <strong>یادآوری:</strong>
+        برای بهترین تجربه، لطفاً قبل از ثبت‌نام یک‌بار همه بندها را مرور کنید. اگر سوالی دارید، از بخش پشتیبانی با ما در تماس باشید.
+        
+        پشتیبانی Trader Gap در تلگرام :  @tradergap_support
+
+      </div>
+    </section>
+
+    
+  </div>
+
+  <script>
+    function openAll(){
+      document.querySelectorAll('details').forEach(d => d.open = true);
+    }
+    function closeAll(){
+      document.querySelectorAll('details').forEach(d => d.open = false);
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    const progressEl = document.getElementById('progress');
+    function updateProgress(){
+      const h = document.documentElement;
+      const scrolled = h.scrollTop || document.body.scrollTop;
+      const height = h.scrollHeight - h.clientHeight;
+      const pct = height > 0 ? (scrolled / height) * 100 : 0;
+      progressEl.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    document.querySelectorAll('.accordion details').forEach(d => {
+      d.addEventListener('toggle', () => {
+        if(d.open){
+          document.querySelectorAll('.accordion details[open]').forEach(o => { if(o !== d) o.open = false; });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
